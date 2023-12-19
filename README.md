@@ -10,6 +10,7 @@ pip install ldap3 pyzabbix
 ## Configuration
 Fill the following parameters
 > ZABBIX_SERVER
+
 > ZABBIX_USER
 > ZABBIX_PASSWORD
 > ZABBIX_GROUP_PANEL
