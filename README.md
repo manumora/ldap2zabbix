@@ -26,6 +26,8 @@ that are not yet in Zabbix and never modifies or deletes existing ones.
 
 - Python 3
 - Network access to the LDAP server and to the Zabbix frontend API
+- An LDAP directory that allows anonymous read access to the `cn=DHCP Config`
+  and `ou=hosts` branches, since the script binds anonymously
 - A Zabbix user with permission to create hosts
 
 ## Installation
@@ -46,8 +48,6 @@ Edit the constants at the top of `ldap2zabbix.py`:
 | `ZABBIX_GROUP` | ID of the Zabbix host group the new hosts are added to |
 | `LDAP_SERVER` | Address of the LDAP server |
 | `LDAP_BASE` | Base DN of the directory, for example `dc=instituto,dc=extremadura,dc=es` |
-| `LDAP_USER` | Administrator DN (kept for reference, the search binds anonymously) |
-| `LDAP_PASSWORD` | Password for that DN |
 | `HOST_SUFFIXES` | List of hostname suffixes to import |
 
 ### Choosing which hosts are imported

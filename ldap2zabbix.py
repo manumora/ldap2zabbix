@@ -30,8 +30,6 @@ ZABBIX_GROUP = "2"
 
 LDAP_SERVER = "IP_SERVIDOR_LDAP"
 LDAP_BASE = "dc=instituto,dc=extremadura,dc=es"
-LDAP_USER = "cn=admin,ou=people,%s" % LDAP_BASE
-LDAP_PASSWORD = "PASSWORD_LDAP"
 
 # Sufijos de los nombres de equipo que se importaran desde LDAP.
 # Cada sufijo genera un filtro (dc=*-<sufijo>) y todos se combinan con un OR.
@@ -40,12 +38,12 @@ LDAP_HOSTS_FILTER = "(|%s)" % "".join("(dc=*-%s)" % suffix for suffix in HOST_SU
 
 
 class LdapConnection(object):
-  def __init__(self, host, user="", password=""):
+  def __init__(self, host):
     self.host = host
-    self.user = user
-    self.password = password
 
   def connectauth(self):
+    # El directorio permite lectura anonima de las ramas que necesitamos,
+    # por eso el bind se hace sin usuario ni contrasena.
     server = Server(self.host, get_info=ALL)
     self.connectauth = Connection(server, "", "")
     self.connectauth.bind()
