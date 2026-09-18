@@ -33,6 +33,11 @@ LDAP_BASE = "dc=instituto,dc=extremadura,dc=es"
 LDAP_USER = "cn=admin,ou=people,%s" % LDAP_BASE
 LDAP_PASSWORD = "PASSWORD_LDAP"
 
+# Sufijos de los nombres de equipo que se importaran desde LDAP.
+# Cada sufijo genera un filtro (dc=*-<sufijo>) y todos se combinan con un OR.
+HOST_SUFFIXES = ["panel", "aio", "sia"]
+LDAP_HOSTS_FILTER = "(|%s)" % "".join("(dc=*-%s)" % suffix for suffix in HOST_SUFFIXES)
+
 
 class LdapConnection(object):
   def __init__(self, host, user="", password=""):
@@ -59,7 +64,7 @@ class LdapConnection(object):
 
   def getHostnames(self):
     hostnames_data = dict()
-    search = self.search("dc=" + self.domain() + ",ou=hosts","(|(dc=*-panel)(dc=*-aio)(dc=*-sia))", ["dc", "aRecord"])
+    search = self.search("dc=" + self.domain() + ",ou=hosts", LDAP_HOSTS_FILTER, ["dc", "aRecord"])
     for s in search:
       hostnames_data[s['dc'][0]] = s['aRecord'][0]
     return hostnames_data
