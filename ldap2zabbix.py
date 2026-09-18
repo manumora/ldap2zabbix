@@ -35,7 +35,7 @@ LDAP_PASSWORD = "PASSWORD_LDAP"
 
 # Sufijos de los nombres de equipo que se importaran desde LDAP.
 # Cada sufijo genera un filtro (dc=*-<sufijo>) y todos se combinan con un OR.
-HOST_SUFFIXES = ["panel", "aio", "sia"]
+HOST_SUFFIXES = ["panel", "aio", "sia", "pro"]
 LDAP_HOSTS_FILTER = "(|%s)" % "".join("(dc=*-%s)" % suffix for suffix in HOST_SUFFIXES)
 
 
