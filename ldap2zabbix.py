@@ -23,17 +23,15 @@
 from ldap3 import Server, Connection, ALL, SUBTREE
 from pyzabbix import ZabbixAPI
 
-ZABBIX_SERVER = ""
-ZABBIX_USER = ""
-ZABBIX_PASSWORD = ""
-ZABBIX_GROUP_PANEL = ""
-ZABBIX_GROUP_AIO = ""
-ZABBIX_GROUP_SIA = ""
+ZABBIX_SERVER = "http://IP_SERVIDOR_ZABBIX"
+ZABBIX_USER = "Admin"
+ZABBIX_PASSWORD = "zabbix"
+ZABBIX_GROUP = "2"
 
-LDAP_SERVER = "servidor"
+LDAP_SERVER = "IP_SERVIDOR_LDAP"
 LDAP_BASE = "dc=instituto,dc=extremadura,dc=es"
 LDAP_USER = "cn=admin,ou=people,%s" % LDAP_BASE
-LDAP_PASSWORD = ""
+LDAP_PASSWORD = "PASSWORD_LDAP"
 
 
 class LdapConnection(object):
@@ -66,15 +64,6 @@ class LdapConnection(object):
       hostnames_data[s['dc'][0]] = s['aRecord'][0]
     return hostnames_data
 
-
-def getZabbixGroup(hostname):
-  if hostname.endswith("-panel"):
-    return ZABBIX_GROUP_PANEL
-  elif hostname.endswith("-aio"):
-    return ZABBIX_GROUP_AIO
-  elif hostname.endswith("-sia"):
-    return ZABBIX_GROUP_SIA
-
 def main():
   l = LdapConnection(LDAP_SERVER)
   l.connectauth()
@@ -99,19 +88,11 @@ def main():
             ip=ip,
             dns="%s.%s" % (hostname, domain),
             port="10050"
-          ),
-          dict( 
-            type=1,
-            main=0,
-            useip=1,
-            ip=ip,
-            dns="%s.%s" % (hostname, domain),
-            port="10050"
           )
         ],
         groups=[
           dict(
-            groupid=getZabbixGroup(hostname)
+            groupid=ZABBIX_GROUP
           )
         ]
       )
